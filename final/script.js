@@ -81,6 +81,7 @@ class App {
   #mapZoomLevel = 13;
   #mapEvent;
   #workouts = [];
+  #coords;
 
   constructor() {
     // Get user's position
@@ -114,9 +115,14 @@ class App {
 
     this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
 
+    // L.tileLayer('https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=0773e400f0854b86be8458cb0ed761d3', {
+    //   attribution:
+    //     'Maps &copy; <a href = "www.thunderforest.com">Thunderforest</a> Data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    // }).addTo(this.#map);
+
     L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
       attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
 
     // Handling clicks on map
@@ -125,6 +131,15 @@ class App {
     this.#workouts.forEach(work => {
       this._renderWorkoutMarker(work);
     });
+
+    this.#coords = coords;
+
+    var circle = L.circle(coords, {
+      color: 'red',
+      fillColor: '#f03',
+      fillOpacity: 0.5,
+      radius: 5000
+    }).addTo(this.#map);
   }
 
   _showForm(mapE) {
