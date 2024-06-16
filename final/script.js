@@ -18,7 +18,7 @@ class Workout {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${
-      months[this.date.getMonth()]
+        months[this.date.getMonth()]
     } ${this.date.getDate()}`;
   }
 
@@ -99,10 +99,10 @@ class App {
   _getPosition() {
     if (navigator.geolocation)
       navigator.geolocation.getCurrentPosition(
-        this._loadMap.bind(this),
-        function () {
-          alert('Could not get your position');
-        }
+          this._loadMap.bind(this),
+          function () {
+            alert('Could not get your position');
+          }
       );
   }
 
@@ -151,7 +151,7 @@ class App {
   _hideForm() {
     // Empty inputs
     inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value =
-      '';
+        '';
 
     form.style.display = 'none';
     form.classList.add('hidden');
@@ -165,7 +165,7 @@ class App {
 
   _newWorkout(e) {
     const validInputs = (...inputs) =>
-      inputs.every(inp => Number.isFinite(inp));
+        inputs.every(inp => Number.isFinite(inp));
     const allPositive = (...inputs) => inputs.every(inp => inp > 0);
 
     e.preventDefault();
@@ -183,11 +183,11 @@ class App {
 
       // Check if data is valid
       if (
-        // !Number.isFinite(distance) ||
-        // !Number.isFinite(duration) ||
-        // !Number.isFinite(cadence)
-        !validInputs(distance, duration, cadence) ||
-        !allPositive(distance, duration, cadence)
+          // !Number.isFinite(distance) ||
+          // !Number.isFinite(duration) ||
+          // !Number.isFinite(cadence)
+          !validInputs(distance, duration, cadence) ||
+          !allPositive(distance, duration, cadence)
       )
         return alert('Inputs have to be positive numbers!');
 
@@ -199,8 +199,8 @@ class App {
       const elevation = +inputElevation.value;
 
       if (
-        !validInputs(distance, duration, elevation) ||
-        !allPositive(distance, duration)
+          !validInputs(distance, duration, elevation) ||
+          !allPositive(distance, duration)
       )
         return alert('Inputs have to be positive numbers!');
 
@@ -225,20 +225,20 @@ class App {
 
   _renderWorkoutMarker(workout) {
     L.marker(workout.coords)
-      .addTo(this.#map)
-      .bindPopup(
-        L.popup({
-          maxWidth: 250,
-          minWidth: 100,
-          autoClose: false,
-          closeOnClick: false,
-          className: `${workout.type}-popup`,
-        })
-      )
-      .setPopupContent(
-        `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
-      )
-      .openPopup();
+        .addTo(this.#map)
+        .bindPopup(
+            L.popup({
+              maxWidth: 250,
+              minWidth: 100,
+              autoClose: false,
+              closeOnClick: false,
+              className: `${workout.type}-popup`,
+            })
+        )
+        .setPopupContent(
+            `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
+        )
+        .openPopup();
   }
 
   _renderWorkout(workout) {
@@ -247,8 +247,8 @@ class App {
         <h2 class="workout__title">${workout.description}</h2>
         <div class="workout__details">
           <span class="workout__icon">${
-            workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
-          }</span>
+        workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
+    }</span>
           <span class="workout__value">${workout.distance}</span>
           <span class="workout__unit">km</span>
         </div>
@@ -301,7 +301,7 @@ class App {
     if (!workoutEl) return;
 
     const workout = this.#workouts.find(
-      work => work.id === workoutEl.dataset.id
+        work => work.id === workoutEl.dataset.id
     );
 
     this.#map.setView(workout.coords, this.#mapZoomLevel, {
@@ -339,30 +339,71 @@ class App {
 
 const app = new App();
 
-fetch('http://localhost:3000/arduino-data')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Handle the data received from the backend
-      data;
-      console.log(data);
-      data.forEach(property => {
-        if (property.name === "Gps") {
-          let lat = property.last_value.lat;
-          let lng = property.last_value.lon;
-          let coords = [lat, lng];
-          const apiTest = new Cycling(coords, 10, 20, 3);
-          app._renderWorkout(apiTest);
-          app._renderWorkoutMarker(apiTest);
-        }
-      });
-    })
-    .catch(error => {
-      // Handle any errors that occurred during the fetch
-      console.error('Fetch error:', error);
-    });
+// while(true) {
+//   fetch('http://localhost:3000/arduino-data')
+//       .then(response => {
+//         if (!response.ok) {
+//           throw new Error('Network response was not ok');
+//         }
+//         return response.json();
+//       })
+//       .then(datas => {
+//         // Handle the data received from the backend
+//         datas;
+//         console.log(datas);
+//
+//         datas.forEach(data => data.forEach(property => {
+//               if (property.name === "Gps") {
+//                 let lat = property.last_value.lat;
+//                 let lng = property.last_value.lon;
+//                 let coords = [lat, lng];
+//                 const apiTest = new Cycling(coords, 10, 20, 3);
+//                 app._renderWorkout(apiTest);
+//                 app._renderWorkoutMarker(apiTest);
+//               }
+//             })
+//         )
+//       })
+//       .catch(error => {
+//         // Handle any errors that occurred during the fetch
+//         console.error('Fetch error:', error);
+//       });
+//   setTimeout(1000);
+// }
 
+function fetchData() {
+  fetch('http://localhost:3000/arduino-data')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(datas => {
+        // Handle the data received from the backend
+        console.log(datas);
+
+        datas.forEach(data => {
+          data.forEach(property => {
+            if (property.name === "Gps") {
+              let lat = property.last_value.lat;
+              let lng = property.last_value.lon;
+              let coords = [lat, lng];
+              const apiTest = new Cycling(coords, 10, 20, 3);
+              app._renderWorkout(apiTest);
+              app._renderWorkoutMarker(apiTest);
+            }
+          });
+        });
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the fetch
+        console.error('Fetch error:', error);
+      });
+
+  // Schedule the next request
+  setTimeout(fetchData, 1000);
+}
+
+// Start the periodic data fetching
+fetchData();

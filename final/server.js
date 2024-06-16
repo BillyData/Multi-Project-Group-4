@@ -38,20 +38,23 @@ async function listProperties() {
     oauth2.accessToken = await getToken();
 
     var api = new IotApi.PropertiesV2Api(client)
-    var id = "8194898f-88eb-4793-babf-9768e877bc86"; // {String} The id of the thing
+    var id1 = "8194898f-88eb-4793-babf-9768e877bc86"; // {String} The id of the thing
+    var id2 = "4f8e86a9-16a5-409e-a599-ba781723cca4"
 
     var opts = {
         'showDeleted': true // {Boolean} If true, shows the soft deleted properties
     };
 
     try {
-        const data = await api.propertiesV2List(id, opts);
-        return data;
+        const data1 = await api.propertiesV2List(id1, opts);
+        const data2 = await api.propertiesV2List(id2, opts);
+        return [data1, data2];
     } catch (error) {
         console.error("Error fetching properties:", error);
         throw error;
     }
 }
+
 
 app.get('/arduino-data', async (req, res) => {
     try {
