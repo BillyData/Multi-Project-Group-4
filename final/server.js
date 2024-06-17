@@ -39,7 +39,8 @@ async function listProperties() {
 
     var api = new IotApi.PropertiesV2Api(client)
     var id1 = "8194898f-88eb-4793-babf-9768e877bc86"; // {String} The id of the thing
-    var id2 = "4f8e86a9-16a5-409e-a599-ba781723cca4"
+    var id2 = "4f8e86a9-16a5-409e-a599-ba781723cca4";
+    var id3 = "473e551a-8e4b-4500-867e-0d6b4c8e97ff";
 
     var opts = {
         'showDeleted': true // {Boolean} If true, shows the soft deleted properties
@@ -48,7 +49,8 @@ async function listProperties() {
     try {
         const data1 = await api.propertiesV2List(id1, opts);
         const data2 = await api.propertiesV2List(id2, opts);
-        return [data1, data2];
+        const data3 = await api.propertiesV2List(id3, opts);
+        return [[id1, data1], [id2, data2], [id3, data3]];
     } catch (error) {
         console.error("Error fetching properties:", error);
         throw error;
